@@ -12,6 +12,7 @@
 		0B469FF72CAF16EA000BDE54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B469FF62CAF16EA000BDE54 /* Assets.xcassets */; };
 		0B469FFA2CAF16EA000BDE54 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B469FF92CAF16EA000BDE54 /* Preview Assets.xcassets */; };
 		0B46A0012CAF1710000BDE54 /* InputFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B46A0002CAF1710000BDE54 /* InputFormView.swift */; };
+		0BBD3FE22CAFF0A10039F5EF /* KeyBordHealper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBD3FE12CAFF0A10039F5EF /* KeyBordHealper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		0B469FF62CAF16EA000BDE54 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0B469FF92CAF16EA000BDE54 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		0B46A0002CAF1710000BDE54 /* InputFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputFormView.swift; sourceTree = "<group>"; };
+		0BBD3FE12CAFF0A10039F5EF /* KeyBordHealper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyBordHealper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 		0B469FF12CAF16E9000BDE54 /* SwiftUI R&D */ = {
 			isa = PBXGroup;
 			children = (
+				0BBD3FE02CAFF08F0039F5EF /* Helper */,
 				0B469FF22CAF16E9000BDE54 /* SwiftUI_R_DApp.swift */,
 				0B469FF42CAF16E9000BDE54 /* ContentView.swift */,
 				0B469FF62CAF16EA000BDE54 /* Assets.xcassets */,
@@ -68,6 +71,14 @@
 				0B469FF92CAF16EA000BDE54 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		0BBD3FE02CAFF08F0039F5EF /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				0BBD3FE12CAFF0A10039F5EF /* KeyBordHealper.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BBD3FE22CAFF0A10039F5EF /* KeyBordHealper.swift in Sources */,
 				0B469FF52CAF16E9000BDE54 /* ContentView.swift in Sources */,
 				0B469FF32CAF16E9000BDE54 /* SwiftUI_R_DApp.swift in Sources */,
 				0B46A0012CAF1710000BDE54 /* InputFormView.swift in Sources */,

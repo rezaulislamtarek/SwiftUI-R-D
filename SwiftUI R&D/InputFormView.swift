@@ -8,19 +8,22 @@
 import SwiftUI
 
 struct InputFormView: View {
-    @State private var firstName : String = ""
-    @State private var lastName : String = ""
-    @State private var fullName : String = ""
-    @State private var phoneNumber : String = ""
-    @State private var email : String = ""
-    @State private var bio : String = ""
-    @State private var details : String = ""
-    @State private var details2 : String = ""
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
+    @State private var fullName: String = ""
+    @State private var phoneNumber: String = ""
+    @State private var email: String = ""
+    @State private var bio: String = ""
+    @State private var details: String = ""
+    @State private var details2: String = ""
+    
+    @FocusState private var focusedField: Field?
+
     var body: some View {
         ScrollViewReader { sp in
-            VStack{
+            VStack {
                 ScrollView {
-                    VStack(spacing: 12){
+                    VStack(spacing: 12) {
                         Image(systemName: "scribble.variable")
                             .resizable()
                             .frame(width: 100, height: 100)
@@ -29,69 +32,49 @@ struct InputFormView: View {
                             .clipShape(Circle())
                             .padding()
                         
-                        VStack{
-                           // Section{
-                                TextField("First Name", text: $firstName)
-                                .padding()
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(16)
+                        VStack {
+                            TextField("First Name", text: $firstName)
+                                .focused($focusedField, equals: .firstName)
+                                .textFieldStyle()
                             
-                                TextField("Last Name", text: $lastName)
-                                .padding()
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(16)
+                            TextField("Last Name", text: $lastName)
+                                .focused($focusedField, equals: .lastName)
+                                .textFieldStyle()
                             
-                                TextField("Full Name", text: $fullName)
-                                .padding()
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(16)
+                            TextField("Full Name", text: $fullName)
+                                .focused($focusedField, equals: .fullName)
+                                .textFieldStyle()
                             
-                            //}
-                           // Section{
-                                TextField("Email", text: $email)
-                                .padding()
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(16)
+                            TextField("Email", text: $email)
+                                .focused($focusedField, equals: .email)
+                                .textFieldStyle()
                             
-                                TextField("Phone number", text: $phoneNumber)
-                                .padding()
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(16)
-                          //  }
-                          //  Section{
-                                TextField("Bio", text: $bio, axis: .vertical)
-                                .padding()
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(16)
+                            TextField("Phone number", text: $phoneNumber)
+                                .focused($focusedField, equals: .phoneNumber)
+                                .textFieldStyle()
+                            
+                            TextField("Bio", text: $bio, axis: .vertical)
+                                .focused($focusedField, equals: .bio)
                                 .keyboardAwarePadding(text: $bio, id: "bio", sp: sp)
-                                 
-                            
+                                .textFieldStyle()
                             
                             TextField("Enter details", text: $details, axis: .vertical)
-                                                    .padding()
-                                                    .background(Color.green.opacity(0.1))
-                                                    .cornerRadius(16)
-                                                    .keyboardAwarePadding(text: $details, id: "details", sp: sp)
-                                                    
+                                .focused($focusedField, equals: .details)
+                                .keyboardAwarePadding(text: $details, id: "details", sp: sp)
+                                .textFieldStyle()
                             
-                             
-                            
-                            TextField("Whats on your mind", text: $details2, axis: .vertical)
-                                .padding()
-                                .background(Color.green.opacity(0.1))
-                                .cornerRadius(16)
+                            TextField("What's on your mind", text: $details2, axis: .vertical)
+                                .focused($focusedField, equals: .details2)
                                 .keyboardAwarePadding(text: $details2, id: "onMind", sp: sp)
-                                      
-                            
+                                .textFieldStyle()
                         }
-                        
                     }
                     .font(.system(size: 14, weight: .regular, design: .rounded))
                     .padding(.horizontal)
                 }
                 
                 Button {
-                    
+                    // Save action
                 } label: {
                     Text("Save")
                         .frame(maxWidth: .infinity)
@@ -102,10 +85,95 @@ struct InputFormView: View {
                 }
                 .padding(.horizontal)
             }
+            .onChange(of: focusedField) { newValue in
+                if newValue == .details {
+                    details = ""
+                }
+                if newValue == .details2 {
+                    details2 = ""
+                }
+            }
         }
-          
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Button("Previous") {
+                    switchToPreviousField()
+                }
+                .disabled(focusedField == .firstName)
+                
+                Button("Next") {
+                    switchToNextField()
+                    if focusedField == .bio{
+                        details = " "
+                    }
+                    if focusedField == .details{
+                        details2 = " "
+                    }
+                }
+                .disabled(focusedField == .details2)
+                
+                Spacer()
+                
+                Button("Done") {
+                    focusedField = nil
+                }
+            }
+        }
+    }
+    
+    private func switchToPreviousField() {
+        withAnimation {
+            focusedField = focusedField?.previous
+        }
+    }
+    
+    private func switchToNextField() {
+        withAnimation {
+            focusedField = focusedField?.next
+        }
+    }
+    
+    // Enum for each field
+    private enum Field: Hashable {
+        case firstName, lastName, fullName, email, phoneNumber, bio, details, details2
+
+        var next: Field? {
+            switch self {
+            case .firstName: return .lastName
+            case .lastName: return .fullName
+            case .fullName: return .email
+            case .email: return .phoneNumber
+            case .phoneNumber: return .bio
+            case .bio: return .details
+            case .details: return .details2
+            case .details2: return nil
+            }
+        }
+
+        var previous: Field? {
+            switch self {
+            case .firstName: return nil
+            case .lastName: return .firstName
+            case .fullName: return .lastName
+            case .email: return .fullName
+            case .phoneNumber: return .email
+            case .bio: return .phoneNumber
+            case .details: return .bio
+            case .details2: return .details
+            }
+        }
     }
 }
+
+// Modifier for styling text fields
+extension View {
+    func textFieldStyle() -> some View {
+        self.padding()
+            .background(Color.green.opacity(0.1))
+            .cornerRadius(16)
+    }
+}
+
 
 #Preview {
     InputFormView()
@@ -113,27 +181,3 @@ struct InputFormView: View {
 
  
 
-// Custom ViewModifier for reusable behavior
-struct KeyboardAwareModifier: ViewModifier {
-    
-    @Binding var text: String
-    let id: String
-    let sp: ScrollViewProxy
-    
-    func body(content: Content) -> some View {
-        content
-            .id(id)
-            .onChange(of: text) { _ in
-                withAnimation(.easeOut(duration: 0.3)) {
-                    sp.scrollTo(id, anchor: .bottom)
-                }
-            }
-    }
-}
-
-// A convenience method to apply the modifier
-extension View {
-    func keyboardAwarePadding(  text: Binding<String>, id: String, sp: ScrollViewProxy) -> some View {
-        self.modifier(KeyboardAwareModifier(  text: text, id: id, sp: sp))
-    }
-}
